@@ -21,8 +21,33 @@ all_samples = sorted(set(sample_df.index))
 
 rule target:
     input:
-        'output/020_filtered-genotypes/filtered.vcf.gz'
+        'output/030_phasing/phased.vcf.gz'
 
+rule phase:
+    input:
+        ref = ref,
+        vcf = 'output/020_filtered-genotypes/filtered.vcf.gz',
+        bam = 'output/010_genotypes/merged.bam',
+        csv = 'config/phasing.csv'
+    output:
+        'output/030_phasing/phased.vcf.gz'
+    log:
+        'output/logs/phase.log'
+    params:
+        outdir = 'output/030_phasing'
+    threads:
+        workflow.cores
+    container:
+        phase_honeybee_vcf
+    shell:
+        'phase_honeybee_vcf '
+        '--threads {threads} '
+        '--ref {input.ref} '
+        '--vcf {input.vcf} '
+        '--bam {input.bam} '
+        '--samples_csv {input.csv} '
+        '--outdir {params.outdir} '
+        '2> {log}'
 
 rule filter:
     input:
