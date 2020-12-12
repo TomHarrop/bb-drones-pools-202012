@@ -72,7 +72,7 @@ rule filter:
 
 
 # genotype
-checkpoint genotype:
+rule genotype:
     input:
         csv = sample_info,
         ref = ref,
