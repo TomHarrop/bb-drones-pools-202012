@@ -7,6 +7,7 @@ honeybee_genotype_pipeline = (
     'honeybee-genotype-pipeline:honeybee_genotype_pipeline_v0.0.12')
 samtools = 'shub://TomHarrop/align-utils:samtools_1.10'
 phase_honeybee_vcf = 'shub://TomHarrop/phase-honeybee-vcf:phase_honeybee_vcf_v0.0.2'
+bioconductor = 'shub://TomHarrop/r-containers:bioconductor_3.11'
 
 ref = 'data/GCF_003254395.2_Amel_HAv3.1_genomic.fna'
 fai = f'{ref}.fai'
@@ -21,7 +22,19 @@ all_samples = sorted(set(sample_df.index))
 
 rule target:
     input:
-        'output/030_phasing/phased.vcf.gz'
+        'output/040_ibs/ibs.csv'
+
+rule calc_ibs:
+    input:
+        vcf = 'output/030_phasing/phased.vcf.gz'
+    output:
+        ibs = 'output/040_ibs/ibs.csv'
+    log:
+        'output/logs/calc_ibs.log'
+    singularity:
+        bioconductor
+    script:
+        'src/calc_ibs.R'
 
 rule phase:
     input:
