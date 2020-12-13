@@ -36,7 +36,7 @@ ibs_df <- data.frame(ibs_res$ibs, row.names = ibs_res$sample.id)
 colnames(ibs_df) <- ibs_res$sample.id
 
 fwrite(ibs_df, 
-       snakemake@outuput[["grm"]],
+       snakemake@output[["ibs"]],
        row.names = TRUE)
 
 sessionInfo()
